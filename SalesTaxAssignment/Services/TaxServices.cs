@@ -11,20 +11,22 @@ namespace SalesTaxAssignment.Services
     {
         public decimal CalculateTax(Product product)
         {
-            decimal taxRate = 0m;
+            decimal taxRate = 0;
 
-            // Basic tax: 10% if not exempt
-            if (product.Category == Category.Other)
+            bool isExempt = product.Category == Category.Book
+                         || product.Category == Category.Food
+                         || product.Category == Category.Medical;
+
+            if (!isExempt)
                 taxRate += 0.10m;
 
-            // Import duty: 5% if imported
             if (product.IsImported)
                 taxRate += 0.05m;
 
-            decimal rawTax = product.Price * taxRate;
+            var rawTax = product.Price * taxRate;
+            var roundedTax = Math.Ceiling(rawTax * 20) / 20m;
 
-            // Round up to nearest 0.05
-            return Math.Ceiling(rawTax * 20) / 20m;
+            return roundedTax;
         }
 
         public decimal PriceWithTax(Product product)

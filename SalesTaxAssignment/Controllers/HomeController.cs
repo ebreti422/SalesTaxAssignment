@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SalesTaxAssignment.Models;
+using System.Diagnostics;
 
 namespace SalesTaxAssignment.Controllers
 {

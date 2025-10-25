@@ -71,7 +71,7 @@ namespace SalesTaxAssignment.Services
 
             foreach (var item in items)
             {
-                var tax = _taxService.CalculateTax(item.Product);
+                var tax = _taxService.CalculateTax(item.Product); // per-unit tax
                 var unitPriceWithTax = item.Product.Price + tax;
                 var lineTotal = unitPriceWithTax * item.Quantity;
 
