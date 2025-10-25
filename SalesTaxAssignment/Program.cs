@@ -10,7 +10,7 @@ namespace SalesTaxAssignment
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<SalesTaxAssignmentContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SalesTaxAssignmentContext") ?? throw new InvalidOperationException("Connection string 'SalesTaxAssignmentContext' not found.")));
+                options.UseInMemoryDatabase("SalesTaxAssignment"));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

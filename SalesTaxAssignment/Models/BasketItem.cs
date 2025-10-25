@@ -7,6 +7,8 @@
         public Product Product { get; set; }
         public int Quantity { get; set; }
         public string BasketKey { get; set; }
+        public int InputId { get; set; }
+        public Input Input { get; set; }
     }
 
 }

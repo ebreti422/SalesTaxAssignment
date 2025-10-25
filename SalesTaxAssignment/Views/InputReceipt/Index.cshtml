@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Select Input";
+}
+
+<h2>Select Input</h2>
+
+<form asp-action="Receipt" method="get">
+    <select name="inputId" asp-items="ViewBag.Inputs" class="form-control"></select>
+    <button type="submit" class="btn btn-primary mt-2">View Receipt</button>
+</form>
