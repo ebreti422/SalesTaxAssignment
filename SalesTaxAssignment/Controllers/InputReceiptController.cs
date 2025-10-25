@@ -19,20 +19,47 @@ namespace SalesTaxAssignment.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Inputs = new SelectList(_context.Input, "Id", "Name");
+            var basketKeys = _context.BasketItem
+                .Select(b => b.BasketKey)
+                .Distinct()
+                .ToList();
+
+            ViewBag.Inputs = new SelectList(basketKeys);
             return View();
         }
 
-        public IActionResult Receipt(int inputId)
+        // Explicit route for seeded inputs
+        [HttpGet("InputReceipt/ReceiptById")]
+        public IActionResult ReceiptById(int inputId)
         {
             var input = _context.Input
                 .Include(i => i.BasketItems)
                 .ThenInclude(b => b.Product)
                 .FirstOrDefault(i => i.Id == inputId);
 
-            if (input == null) return NotFound();
+            if (input == null)
+                return NotFound();
 
             var receipt = _receiptService.GenerateReceipt(input.BasketItems.ToList());
+            return View("Receipt", receipt);
+        }
+
+        // Explicit route for custom inputs
+        [HttpGet("InputReceipt/Receipt")]
+        public IActionResult Receipt(string BasketKey)
+        {
+            if (string.IsNullOrWhiteSpace(BasketKey))
+                return NotFound();
+
+            var basketItems = _context.BasketItem
+                .Where(b => b.BasketKey == BasketKey)
+                .Include(b => b.Product)
+                .ToList();
+
+            if (!basketItems.Any())
+                return NotFound();
+
+            var receipt = _receiptService.GenerateReceipt(basketItems);
             return View(receipt);
         }
     }

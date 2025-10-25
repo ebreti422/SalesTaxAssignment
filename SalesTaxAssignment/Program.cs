@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SalesTaxAssignment.Data;
 using SalesTaxAssignment.Services;
 namespace SalesTaxAssignment
@@ -19,6 +18,12 @@ namespace SalesTaxAssignment
             builder.Services.AddScoped<IReceiptService, ReceiptService>();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<SalesTaxAssignmentContext>();
+                context.Database.EnsureCreated(); // ← This forces the seed to apply
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
